@@ -43,8 +43,16 @@ source 'https://rubygems.org'
  group :development, :test do
    gem 'rspec-rails', '~> 3.0'
    gem 'rails-controller-testing'
+ end
 
+ group :test do
+   gem 'shoulda'
+   gem 'faker'
+   gem 'factory_girl_rails'
+   gem 'simplecov'
  end
 
  gem 'bootstrap-sass'
+
+ gem 'devise'
 end
