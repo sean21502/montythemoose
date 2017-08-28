@@ -39,6 +39,10 @@ source 'https://rubygems.org'
  
  group :development do
    gem 'listen', '~> 3.0.5'
+   gem 'pry-rails'
+   gem 'better_errors'
+   gem 'binding_of_caller'
+ end
 
  group :development, :test do
    gem 'rspec-rails', '~> 3.0'
@@ -56,4 +60,4 @@ source 'https://rubygems.org'
 
  gem 'devise'
  gem 'figaro', '1.0'
-end
+
