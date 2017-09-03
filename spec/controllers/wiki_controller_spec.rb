@@ -1,7 +1,12 @@
 require 'rails_helper'
 
-
 RSpec.describe WikiController, type: :controller do
+
+  before(:each) do
+    @my_user = FactoryGirl.create(:user)
+    sign_in @my_user
+    @my_wiki = FactoryGirl.create(:wiki, user: @my_user)
+  end
 
   describe "GET #index" do
     it "returns http success" do
@@ -45,40 +50,40 @@ RSpec.describe WikiController, type: :controller do
 
   describe "GET show" do
     it "returns http success" do
-      get :show, params: { id: my_post.id }
+      get :show, params: { id: @my_wiki.id }
       expect(response).to have_http_status(:success)
     end
     
     it "renders the #show view" do
-      get :show, params: { id: my_post.id }
+      get :show, params: { id: @my_wiki.id }
       expect(response).to render_template :show
     end
  
-    it "assigns my_post to @wiki" do
-      get :show, params: { id: my_post.id }
-      expect(assigns(:wiki)).to eq(my_post)
+    it "assigns @my_wiki to @wiki" do
+      get :show, params: { id: @my_wiki.id }
+      expect(assigns(:wiki)).to eq(@my_wiki)
     end
   end
 
   describe "GET edit" do
     it "returns http success" do
-      get :edit, params: { id: my_post.id }
+      get :edit, params: { id: @my_wiki.id }
       expect(response).to have_http_status(:success)
     end
  
     it "renders the #edit view" do
-      get :edit, params: { id: my_post.id }
+      get :edit, params: { id: @my_wiki.id }
       expect(response).to render_template :edit
     end
  
     it "assigns post to be updated to @wiki" do
-      get :edit, params: { id: my_post.id }
+      get :edit, params: { id: @my_wiki.id }
  
       wiki_instance = assigns(:wiki)
  
-      expect(wiki_instance.id).to eq my_post.id
-      expect(wiki_instance.title).to eq my_post.title
-      expect(wiki_instance.body).to eq my_post.body
+      expect(wiki_instance.id).to eq @my_wiki.id
+      expect(wiki_instance.title).to eq @my_wiki.title
+      expect(wiki_instance.body).to eq @my_wiki.body
     end
   end
 
@@ -87,10 +92,10 @@ RSpec.describe WikiController, type: :controller do
       new_title = RandomData.random_sentence
       new_body = RandomData.random_paragraph
  
-      put :update, params: { id: my_post.id, wiki: {title: new_title, body: new_body } }
+      put :update, params: { id: @my_wiki.id, wiki: {title: new_title, body: new_body } }
  
       updated_wiki = assigns(:wiki)
-      expect(updated_wiki.id).to eq my_post.id
+      expect(updated_wiki.id).to eq @my_wiki.id
       expect(updated_wiki.title).to eq new_title
       expect(updated_wiki.body).to eq new_body
     end
@@ -99,20 +104,20 @@ RSpec.describe WikiController, type: :controller do
       new_title = RandomData.random_sentence
       new_body = RandomData.random_paragraph
  
-      put :update, params: { id: my_post.id, wiki: {title: new_title, body: new_body } }
-      expect(response).to redirect_to my_post
+      put :update, params: { id: @my_wiki.id, wiki: {title: new_title, body: new_body } }
+      expect(response).to redirect_to @my_wiki
     end
   end
 
   describe "DELETE destroy" do
     it "deletes the post" do
-      delete :destroy, params: { id: my_post.id }
-      count = Wiki.where({id: my_post.id}).size
+      delete :destroy, params: { id: @my_wiki.id }
+      count = Wiki.where({id: @my_wiki.id}).size
       expect(count).to eq 0
     end
  
     it "redirects to posts index" do
-      delete :destroy, params: { id: my_post.id }
+      delete :destroy, params: { id: @my_wiki.id }
       expect(response).to redirect_to wiki_path
     end
   end
