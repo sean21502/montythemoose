@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'random_data'
 
 RSpec.describe WikiController, type: :controller do
 
@@ -34,16 +35,16 @@ RSpec.describe WikiController, type: :controller do
  
   describe "WIKI create" do
     it "increases the number of Wiki by 1" do
-      expect{ post :create, params: { wiki: { title: RandomData.random_title , body: RandomData.random_sentence } } }.to change(Wiki,:count).by(1)
+      expect{ post :create, params: { wiki: { title: RandomData.random_word , body: RandomData.random_sentence }}}.to change(Wiki,:count).by(1)
     end
  
     it "assigns the new post to @wiki" do
-      post :create, params: { wiki: { title: RandomData.random_title, body: RandomData.random_sentence } }
+      post :create, params: { wiki: { title: RandomData.random_word, body: RandomData.random_sentence } }
       expect(assigns(:wiki)).to eq Wiki.last
     end
  
     it "redirects to the new wiki" do
-      post :create, params: { wiki: { title: RandomData.random_title , body: RandomData.random_sentence } }
+      post :create, params: { wiki: { title: RandomData.random_word , body: RandomData.random_sentence } }
       expect(response).to redirect_to Wiki.last
     end
   end
@@ -100,7 +101,7 @@ RSpec.describe WikiController, type: :controller do
       expect(updated_wiki.body).to eq new_body
     end
  
-    it "redirects to the updated post" do
+    it "redirects to the updated wiki" do
       new_title = RandomData.random_sentence
       new_body = RandomData.random_paragraph
  
@@ -118,7 +119,7 @@ RSpec.describe WikiController, type: :controller do
  
     it "redirects to posts index" do
       delete :destroy, params: { id: @my_wiki.id }
-      expect(response).to redirect_to wiki_path
+      expect(response).to redirect_to root_path
     end
   end
 end

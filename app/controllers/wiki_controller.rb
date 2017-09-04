@@ -13,11 +13,9 @@ class WikiController < ApplicationController
   end
  
   def create
-    @wiki = Wiki.new
-    @wiki.title = params[:wiki][:title]
-    @wiki.body = params[:wiki][:body]
-
- 	if @wiki.save
+    @wiki = Wiki.new(wiki_params)
+    @wiki.user = current_user
+   	if @wiki.save
       flash[:notice] = "Wiki was saved."
       redirect_to @wiki
     else
@@ -36,7 +34,7 @@ class WikiController < ApplicationController
 
     if @wiki.save
       flash[:notice] = "Wiki was updated."
-      redirect_to [@wiki.topic, @wiki]
+      redirect_to [@wiki]
     else
       flash.now[:alert] = "There was an error saving the wiki. Please try again."
       render :edit
@@ -48,10 +46,16 @@ class WikiController < ApplicationController
 
     if @wiki.destroy
       flash[:notice] = "\"#{@wiki.title}\" was deleted successfully."
-      redirect_to @wiki.topic
+      redirect_to root_path
     else
       flash.now[:alert] = "There was an error deleting the wiki."
       render :show
     end
   end
+
+private
+
+  def wiki_params
+    params.require(:wiki).permit(:title, :body)
+  end  
 end
