@@ -10,6 +10,8 @@ class WikisController < ApplicationController
 
   def show
     @wiki = Wiki.find(params[:id])
+    # you need to authorize wikis on all actions
+    # example: authorize @wiki
   end
 
   def create
