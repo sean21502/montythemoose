@@ -24,7 +24,7 @@ end
 users = User.all
 
 10.times do
-	Wiki.create!(
+	wiki = Wiki.create!(
 		user:  users.sample,
 		title:  RandomData.random_sentence,
 		body:  RandomData.random_paragraph 
