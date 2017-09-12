@@ -1,3 +1,4 @@
+require 'random_data'
 require 'faker'
 
 User.create!(
@@ -11,7 +12,7 @@ admin = User.create!(
    password: 'helloworld',
    confirmed_at: '2016-08-14'
 )
-admin.add_role :admin
+admin.role = :admin
 
 5.times do
   User.create!(
