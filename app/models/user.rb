@@ -7,4 +7,8 @@ class User < ApplicationRecord
   enum role:[:standard, :premium, :admin]
   after_initialize {self.role ||= :standard}
 
+  def downgrade
+  	self.update_attribute(:role, 'standard')
+  end
+
 end
