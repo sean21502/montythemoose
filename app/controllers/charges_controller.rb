@@ -43,6 +43,10 @@ class ChargesController < ApplicationController
 		@user = current_user
 		@user.downgrade
 		flash[:notice] = "Bye #{current_user.email}!"
+    @wikis.each do |wiki|
+      if wiki.private == true
+        wiki.update_attributes!(private: false)
+      end
 		redirect_to root_path
 	end
 end
