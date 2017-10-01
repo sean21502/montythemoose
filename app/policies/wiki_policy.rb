@@ -1,7 +1,7 @@
 class WikiPolicy #< ApplicationPolicy.rb
-    # you can inherit the initilaized objects from application policy. you could then remove all the instance variables and use the variables in ApplicationPolicy.rb
+  # you can inherit the initialized objects from application policy. you could then remove all the instance variables and use the variables in ApplicationPolicy.rb
   attr_reader :current_user, :model
-# 'current_user' can be named anything, the object passed as 'current_user' when initialized is an activerecord 'user object' that devise supplies. it references the current_user, the model is a reference to the object that is being authorized.
+  # 'current_user' can be named anything, the object passed as 'current_user' when initialized is an activerecord 'user object' that devise supplies. it references the current_user, the model is a reference to the object that is being authorized.
   def initialize(current_user, model)
     @current_user = current_user
     @model = model
@@ -36,33 +36,41 @@ class WikiPolicy #< ApplicationPolicy.rb
   end
 
   class Scope
-    
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
+     attr_reader :user, :scope
 
-    def resolve
-      wikis = []
-      if user.role == 'admin'
-        wikis = scope.all
-      elsif user.role = 'premium'
-        all_wikis = scope.all
-        all_wikis.each do |wiki|
-          if wiki.public? || wiki.user == user 
-            wikis << wiki
-          end
-        end
-      else
-        all_wikis = scope.all
-        wikis = []
-        all_wikis.each do |wiki|
-          if wiki.public? 
-            wikis << wiki
-          end
-        end
-      end
-      wikis
-    end
-  end
+     def initialize(user, scope)
+       @user = user
+       @scope = scope
+     end
+
+     def resolve
+       wikis = []
+       if user.role == 'admin'
+         wikis = scope.all # if the user is an admin, show them all the wikis
+       elsif user.role == 'premium'
+         all_wikis = scope.all
+         all_wikis.each do |wiki|
+            # if the user is premium, only show them public wikis, or that private wikis they created, or private wikis they are a collaborator on
+           if !wiki.private? || wiki.user_id == user.id || wiki.collaborators.include?(user.id)
+             wikis << wiki
+             #first condition is if its public?
+             #second tests if they are owner for private wikis
+             #third collaborators
+
+           end
+         end
+       else # this is the lowly standard user
+         all_wikis = scope.all
+         wikis = []
+         all_wikis.each do |wiki|
+           # only show standard users public wikis and private wikis they are a collaborator on
+           if !wiki.private? || wiki.collaborators.include?(user.id)
+             wikis << wiki
+             # first is public? second collaborators?
+           end
+         end
+       end
+       wikis # return the wikis array we've built up
+     end
+   end
 end
