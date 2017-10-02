@@ -51,7 +51,8 @@ class WikiPolicy #< ApplicationPolicy.rb
          all_wikis = scope.all
          all_wikis.each do |wiki|
             # if the user is premium, only show them public wikis, or that private wikis they created, or private wikis they are a collaborator on
-           if !wiki.private? || wiki.user_id == user.id || wiki.collaborators.include?(user.id)
+           if !wiki.private? || wiki.user_id == user.id 
+             # || wiki.collaborators.include?(user.id)
              wikis << wiki
              #first condition is if its public?
              #second tests if they are owner for private wikis
@@ -64,7 +65,8 @@ class WikiPolicy #< ApplicationPolicy.rb
          wikis = []
          all_wikis.each do |wiki|
            # only show standard users public wikis and private wikis they are a collaborator on
-           if !wiki.private? || wiki.collaborators.include?(user.id)
+           if !wiki.private? 
+            # || wiki.collaborators.include?(user.id)
              wikis << wiki
              # first is public? second collaborators?
            end
