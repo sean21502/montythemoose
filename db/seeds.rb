@@ -13,6 +13,7 @@ admin = User.create!(
    confirmed_at: '2016-08-14'
 )
 admin.role = :admin
+admin.save!
 
 5.times do
   User.create!(

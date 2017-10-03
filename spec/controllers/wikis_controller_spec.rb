@@ -35,16 +35,16 @@ RSpec.describe WikisController, type: :controller do
 
   describe "WIKI create" do
     it "increases the number of Wiki by 1" do
-      expect{ post :create, params: { wiki: { title: RandomData.random_word , body: RandomData.random_sentence }}}.to change(Wiki,:count).by(1)
+      expect{ post :create, params: { wiki: { title: RandomData.random_word , body: RandomData.random_sentence, private: false }}}.to change(Wiki,:count).by(1)
     end
 
     it "assigns the new post to @wiki" do
-      post :create, params: { wiki: { title: RandomData.random_word, body: RandomData.random_sentence } }
+      post :create, params: { wiki: { title: RandomData.random_word, body: RandomData.random_sentence, private: false } }
       expect(assigns(:wiki)).to eq Wiki.last
     end
 
     it "redirects to the new wiki" do
-      post :create, params: { wiki: { title: RandomData.random_word , body: RandomData.random_sentence } }
+      post :create, params: { wiki: { title: RandomData.random_word , body: RandomData.random_sentence, private: false } }
       expect(response).to redirect_to Wiki.last
     end
   end
